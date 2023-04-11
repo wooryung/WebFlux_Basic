@@ -1,6 +1,5 @@
 package com.wrsungwebflux.service;
 
-import com.wrsungwebflux.exception.NoSuchDataException;
 import com.wrsungwebflux.vo.PostVo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +24,6 @@ public class PostService {
         return webClient.get()
                 .uri("https://jsonplaceholder.typicode.com/posts/{id}", id)
                 .retrieve()
-                .bodyToMono(PostVo.class)
-                .switchIfEmpty(Mono.error(new NoSuchDataException("No such data exists.")));
+                .bodyToMono(PostVo.class);
     }
 }

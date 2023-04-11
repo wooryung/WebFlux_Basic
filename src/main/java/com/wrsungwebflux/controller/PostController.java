@@ -3,13 +3,15 @@ package com.wrsungwebflux.controller;
 import com.wrsungwebflux.consts.ResCode;
 import com.wrsungwebflux.dto.GetPostListRespDto;
 import com.wrsungwebflux.dto.GetPostRespDto;
-import com.wrsungwebflux.exception.NoSuchDataException;
 import com.wrsungwebflux.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import reactor.core.publisher.Mono;
+
+import java.net.UnknownHostException;
 
 @RestController
 public class PostController {
@@ -25,6 +27,14 @@ public class PostController {
                     getPostListRespDto.setPostList(postList);
                     return getPostListRespDto;
                 })
+                .onErrorResume(WebClientRequestException.class,
+                        e -> {
+                            if (e.getCause() instanceof UnknownHostException)
+                                return Mono.just(new GetPostListRespDto(null, -4, e.getLocalizedMessage()));
+                            else
+                                return Mono.just(new GetPostListRespDto(null, -90, e.getLocalizedMessage()));
+                        }
+                )
                 .onErrorResume(e -> Mono.just(new GetPostListRespDto(null, ResCode.UNKNOWN.value(), e.getLocalizedMessage())));
     }
 
@@ -36,7 +46,14 @@ public class PostController {
                     getPostRespDto.setPost(postVo);
                     return getPostRespDto;
                 })
-                .onErrorResume(NoSuchDataException.class, e -> Mono.just(new GetPostRespDto(null, ResCode.NO_SUCH_DATA.value(), "No such post exists.")))
+                .onErrorResume(WebClientRequestException.class,
+                        e -> {
+                            if (e.getCause() instanceof UnknownHostException)
+                                return Mono.just(new GetPostRespDto(null, -4, e.getLocalizedMessage()));
+                            else
+                                return Mono.just(new GetPostRespDto(null, -90, e.getLocalizedMessage()));
+                        }
+                )
                 .onErrorResume(e -> Mono.just(new GetPostRespDto(null, ResCode.UNKNOWN.value(), e.getLocalizedMessage())));
     }
 }
