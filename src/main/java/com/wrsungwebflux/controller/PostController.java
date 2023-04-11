@@ -1,8 +1,8 @@
 package com.wrsungwebflux.controller;
 
 import com.wrsungwebflux.consts.ResCode;
-import com.wrsungwebflux.dto.GetPostListRespDto;
-import com.wrsungwebflux.dto.GetPostRespDto;
+import com.wrsungwebflux.dto.post.GetPostListRespDto;
+import com.wrsungwebflux.dto.post.GetPostRespDto;
 import com.wrsungwebflux.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
