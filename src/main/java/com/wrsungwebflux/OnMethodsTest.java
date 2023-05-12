@@ -17,7 +17,7 @@ public class OnMethodsTest {
     @Autowired
     UserService userService;
 
-    @PostConstruct
+//    @PostConstruct
     public void postConstruct() {
         // onErrorComplete -> 에러가 발생하면 cancel로 바뀌고 이후 stream은 실행 x. 바로 complete 신호로 바뀌고 log() 메서드도 동작하지 않음
         // onErrorComplete 메서드는 에러 발생 이후 동작을 붙여줘야 함. 에러 발생 전에 붙여주면 에러 처리 x
